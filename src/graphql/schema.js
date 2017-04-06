@@ -6,26 +6,36 @@ import {
   GraphQLList,
 } from 'graphql';
 
-const PersonType = new GraphQLObjectType({
-  name: 'Person',
+const FixtureHistoryType = new GraphQLObjectType({
+  name: 'FixtureHistory',
   fields: {
-    id: { type: GraphQLID },
-    name: { type: GraphQLString },
+    lineup: { type: new GraphQLList(GraphQLString) },
   },
 });
 
-const peopleData = [
-  { id: 1, name: 'John Smith' },
-  { id: 2, name: 'Sara Smith' },
-  { id: 3, name: 'Budd Deey' },
-];
+const TeamType = new GraphQLObjectType({
+  name: 'Team',
+  fields: {
+    _id: { type: GraphQLID },
+    history: { type: new GraphQLList(FixtureHistoryType) },
+  },
+});
+
+const teamData = {
+  _id: 1,
+  history: [
+    null,
+    {lineup: ['a', 'b', 'c']},
+    {lineup: ['a', 'b', 'c']},
+  ]
+}
 
 const QueryType = new GraphQLObjectType({
   name: 'Query',
   fields: {
-    people: {
-      type: new GraphQLList(PersonType),
-      resolve: () => peopleData,
+    team: {
+      type: TeamType,
+      resolve: () => teamData,
     },
   },
 });

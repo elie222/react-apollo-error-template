@@ -3,7 +3,10 @@ import { gql, graphql } from 'react-apollo';
 
 class App extends Component {
   render() {
-    const { data: { loading, people } } = this.props;
+    const { data: { loading, team } } = this.props;
+
+    console.log(team);
+
     return (
       <main>
         <header>
@@ -24,11 +27,12 @@ class App extends Component {
           <p>Loading…</p>
         ) : (
           <ul>
-            {people.map(person => (
-              <li key={person.id}>
-                {person.name}
+            {team._id}
+            {/* {team.history.lineup.map(team => (
+              <li key={team.id}>
+                {team.name}
               </li>
-            ))}
+            ))} */}
           </ul>
         )}
       </main>
@@ -38,9 +42,12 @@ class App extends Component {
 
 export default graphql(
   gql`{
-    people {
-      id
-      name
+    team {
+      _id
+      # if you dont request history this will work fine
+      history {
+        lineup
+      }
     }
   }`,
 )(App)
